@@ -50,18 +50,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String content = "";
 
   void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+    fetchDio().then((value) => {
+      handleContent(value)
     });
+
     // fetchDio();
-    fetchDioWithCert();
+    //fetchDioWithCert();
+  }
+
+  void handleContent(String result){
+    setState(() {
+      _counter++;
+      content = result;
+    });
   }
 
   @override
@@ -99,11 +103,11 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many times:',
+              'get message from url:',
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              '$_counter \n $content',
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),

@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/services.dart';
 
-void fetchDio() async {
+Future<String> fetchDio() async {
   final dio = Dio();
 
   // TODO: always update to the latest fingerprint.
@@ -16,8 +16,8 @@ void fetchDio() async {
   String fingerprint =
       // 'update-with-latest-sha256-hex-ee5ce1dfa7a53657c545c62b65802e4272';
       // should look like this:
-      'ee5ce1dfa7a53657c545c62b65802e4272878dabd65c0aadcf85783ebb0b4d5c';
-  // '9ee66a02e0af04405c3e9570b039427af237cab3404d42d56dad235969ce626a';
+      // 'ee5ce1dfa7a53657c545c62b65802e4272878dabd65c0aadcf85783ebb0b4d5c';
+  '9ee66a02e0af04405c3e9570b039427af237cab3404d42d56dad235969ce626a';
 
   // Don't trust any certificate just because their root cert is trusted
   dio.httpClientAdapter = IOHttpClientAdapter()
@@ -58,14 +58,16 @@ void fetchDio() async {
     // response = await dio.get('https://bad.host.badssl.com/');
     response = await dio.get('https://www.baidu.com/');
     print(response.data);
+    return response.data;
   } on DioError catch (e) {
     print(e.message);
     print(response?.data);
     dio.close(force: true);
+    return e.message.toString();
   }
 }
 
-void fetchDioWithCert() async {
+Future<String> fetchDioWithCert() async {
   final dio = Dio();
   // ByteData bytes = await rootBundle.load('certificates/baidu.cer');
   ByteData byes = await rootBundle.load('certificates/baidu.cer');
@@ -80,13 +82,15 @@ void fetchDioWithCert() async {
     return httpClient;
   };
   try {
-    var response = await dio.get('https://www.baidu.com/');
+    var response = await dio.get('https://m.baidu.com/');
     print(response.data);
+    return response.data;
   } catch (error) {
     if (error is DioError) {
       print(error.toString());
     } else {
       print('Unexpected Error');
     }
+    return error.toString();
   }
 }
