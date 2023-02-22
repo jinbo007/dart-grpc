@@ -14,9 +14,11 @@
 // limitations under the License.
 
 /// Dart implementation of the gRPC helloworld.Greeter server.
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:app/grpc.dart';
 import 'package:app/grpc/lib/src/generated/helloworld.pbgrpc.dart';
-
 
 class GreeterService extends GreeterServiceBase {
   @override
@@ -25,7 +27,8 @@ class GreeterService extends GreeterServiceBase {
   }
 
   @override
-  Future<HelloReply> sayHelloAgain(ServiceCall call, HelloRequest request) async {
+  Future<HelloReply> sayHelloAgain(
+      ServiceCall call, HelloRequest request) async {
     return HelloReply()..message = 'Hello again, ${request.name}!';
   }
 }
@@ -35,6 +38,49 @@ Future<void> main(List<String> args) async {
     services: [GreeterService()],
     codecRegistry: CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
   );
-  await server.serve(port: 50053);
+
+  await server.serve(port: 50053, security: serverCredential);
   print('Server listening on port ${server.port}...');
 }
+
+final serverCredential = ServerTlsCredentials(
+    certificate: File('lib/cert/server-cert.pem').readAsBytesSync(),
+    certificatePassword: "",
+    privateKey: File('lib/cert/server-key.pem').readAsBytesSync(),
+    privateKeyPassword: "");
+
+//
+// class MyChannelCredentials extends ChannelCredentials {
+//   final Uint8List? certificateChain;
+//   final Uint8List? privateKey;
+//
+//   MyChannelCredentials({
+//     Uint8List? trustedRoots,
+//     this.certificateChain,
+//     this.privateKey,
+//     String? authority,
+//     BadCertificateHandler? onBadCertificate,
+//   }) : super.secure(
+//             certificates: trustedRoots,
+//             authority: authority,
+//             onBadCertificate: onBadCertificate);
+//
+//   @override
+//   SecurityContext? get securityContext {
+//     final ctx = super.securityContext;
+//     if (certificateChain != null) {
+//       ctx?.useCertificateChainBytes(certificateChain!);
+//     }
+//     if (privateKey != null) {
+//       ctx?.usePrivateKeyBytes(privateKey!);
+//     }
+//     return ctx;
+//   }
+// }
+//
+// final credential = MyChannelCredentials(
+//   trustedRoots: File('pems/ca-cert.pem').readAsBytesSync(),
+//   certificateChain: File('pems/client-cert.pem').readAsBytesSync(),
+//   privateKey: File('pems/client-key.pem').readAsBytesSync(),
+//   authority: 'localhost',
+// );
