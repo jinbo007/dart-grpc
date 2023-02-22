@@ -67,11 +67,15 @@ void fetchDio() async {
 
 void fetchDioWithCert() async {
   final dio = Dio();
-  ByteData bytes = await rootBundle.load('certificates/baidu.cer');
+  // ByteData bytes = await rootBundle.load('certificates/baidu.cer');
+  ByteData byes = await rootBundle.load('certificates/baidu.cer');
+  // ByteData byes = await rootBundle.load('certificates/stackoverflow.cer');
+  Uint8List certByteList = byes.buffer.asUint8List();
+  // Uint8List certByteList = File("lib/certificates/baidu.cer").readAsBytesSync();
   (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
       (client) {
     SecurityContext sc = SecurityContext();
-    sc.setTrustedCertificatesBytes(bytes.buffer.asUint8List());
+    sc.setTrustedCertificatesBytes(certByteList);
     HttpClient httpClient = HttpClient(context: sc);
     return httpClient;
   };

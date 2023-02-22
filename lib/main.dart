@@ -60,12 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
-    var data  = fetchDio();
-    // var data  = fetchDioWithCert();
-
+    // fetchDio();
+    fetchDioWithCert();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
