@@ -10,8 +10,8 @@ class MethodChannelLiveness extends LivenessPlatform {
   final methodChannel = const MethodChannel('liveness');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+  Future<String?> startLiveness() async {
+    final version = await methodChannel.invokeMethod<String>('startLiveness');
     return version;
   }
 }

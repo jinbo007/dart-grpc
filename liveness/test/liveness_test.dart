@@ -9,7 +9,7 @@ class MockLivenessPlatform
     implements LivenessPlatform {
 
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
+  Future<String?> startLiveness() => Future.value('42');
 }
 
 void main() {
