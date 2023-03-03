@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dio_mtls.dart';
 import 'pinging.dart';
 
 void main() {
@@ -59,6 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // fetchDio();
     //fetchDioWithCert();
+
+    getDioTls().then((value) => {
+      // getDiomTls().then((value) => {
+      handleContent(value)
+    });
+
   }
 
   void handleContent(String result){
