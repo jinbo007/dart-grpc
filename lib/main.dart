@@ -36,28 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String content = "";
 
-  void _incrementCounter() {
-    // fetchDio().then((value) => {handleContent(value)});
-
-    // fetchDio();
-    //fetchDioWithCert();
-
-    // getDioTls().then((value) => {
-    //       // getDiomTls().then((value) => {
-    //       handleContent(value)
-    //     });
-
-    LivenessPlatform.instance.startLiveness().then(
-        (value) => handleContent("face recognition result:${value ?? ""}"));
-  }
-
-  void handleContent(String result) {
-    setState(() {
-      _counter++;
-      content = "$result\n$content";
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,8 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            TextButton(onPressed: () {}, child: Text('test TextButton')),
             const Text(
               'get message from url:',
             ),
@@ -78,11 +57,69 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => {
+          debugPrint("start test"),
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      persistentFooterAlignment: AlignmentDirectional.lerp(
+          AlignmentDirectional.centerStart,
+          AlignmentDirectional.centerStart,
+          1.0)!,
+      persistentFooterButtons: [
+        FloatingActionButton(
+          onPressed: () => {
+            debugPrint("start test"),
+          },
+          tooltip: 'Increment',
+          child: Icon(Icons.add),
+        ),
+        FloatingActionButton(
+          onPressed: () => {
+            debugPrint("start test"),
+          },
+          tooltip: 'Increment',
+          child: const Icon(Icons.add_a_photo),
+        )
+      ],
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: const <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.red,
+              ),
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: Colors.yellow,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.message),
+              title: Text('Messages'),
+            ),
+            ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('Profile'),
+            ),
+            ListTile(
+              leading: Icon(Icons.flight_land),
+              title: Text("Trix's airplane"),
+              trailing: Icon(Icons.add),
+              enableFeedback: false,
+            ),
+          ],
+        ),
+      ),
+
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
